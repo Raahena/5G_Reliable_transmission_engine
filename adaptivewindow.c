@@ -43,7 +43,7 @@ void adjustWindow(Window *window, int packetLoss)
 /*
  * Display Status
  */
-void displayAdaptiveWindow(Window *window)
+void displayAdaptiveWindow(const Window *window)
 {
     printf("\n===== ADAPTIVE WINDOW =====\n");
     printf("Current Window Size : %d\n", window->windowSize);

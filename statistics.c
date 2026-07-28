@@ -33,19 +33,19 @@ void printStatistics(
     "=====================================\n");
 
     printf(
-    "Packets Sent           : %d\n",
+    "Packets Sent           : %u\n",
     stats->sent);
 
     printf(
-    "Packets Received       : %d\n",
+    "Packets Received       : %u\n",
     stats->received);
 
     printf(
-    "Packets Lost           : %d\n",
+    "Packets Lost           : %u\n",
     stats->lost);
 
     printf(
-    "Packets Retransmitted  : %d\n",
+    "Packets Retransmitted  : %u\n",
     stats->retransmitted);
 
     printf(

@@ -13,6 +13,7 @@ typedef struct
 /*
  * Start Timer
  */
+
 void startTimer(Timer *timer, int timeoutSeconds);
 
 /*

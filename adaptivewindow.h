@@ -25,6 +25,6 @@ void adjustWindow(Window *window, int packetLoss);
 /*
  * Display Window Status
  */
-void displayAdaptiveWindow(Window *window);
+void displayAdaptiveWindow(const Window *window);
 
 #endif

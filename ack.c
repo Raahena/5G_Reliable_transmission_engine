@@ -35,7 +35,7 @@ void markPacketAcknowledged(int ackArray[], int ackNo)
 /*
  * Check ACK status
  */
-int isAcknowledged(int ackArray[], int seqNo)
+int isAcknowledged(const int ackArray[], int seqNo)
 {
     return ackArray[seqNo];
 }

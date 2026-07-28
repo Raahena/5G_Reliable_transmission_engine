@@ -16,7 +16,7 @@ void initBuffer(Buffer *buffer)
 /*
  * Check Full
  */
-int isBufferFull(Buffer *buffer)
+int isBufferFull(const Buffer *buffer)
 {
     return (buffer->count == BUFFER_SIZE);
 }

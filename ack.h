@@ -12,14 +12,14 @@ int ackNo,
  * Mark packet acknowledged
  */
 void markPacketAcknowledged(
-int ackArray[],
+ int ackArray[],
  int ackNo);
 
 /*
  * Check ACK status
  */
 int isAcknowledged(
- int ackArray[],
+const int ackArray[],
 int seqNo);
 
 /*

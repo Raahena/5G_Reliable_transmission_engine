@@ -22,7 +22,7 @@ void initBuffer(Buffer *buffer);
 /*
  * Check Buffer Status
  */
-int isBufferFull(Buffer *buffer);
+int isBufferFull(const Buffer *buffer);
 int isBufferEmpty(Buffer *buffer);
 
 /*

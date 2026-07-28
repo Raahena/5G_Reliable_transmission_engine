@@ -8,23 +8,33 @@
 void testSenderReceiverACK(void)
 {
     Packet packet;
-    Window senderWindow;
-    Buffer buffer;
-    Statistics stats;
 
-    initWindow(&senderWindow, 4);
-    initBuffer(&buffer);
-    initStatistics(&stats);
+    Window *senderWindow = malloc(sizeof(Window));
+    Buffer *buffer = malloc(sizeof(Buffer));
+    Statistics *stats = malloc(sizeof(Statistics));
 
-    packet = createPacket(
-                0,
-                "Hello",
-                HIGH,
-                CONTROL);
+    if (senderWindow == NULL || buffer == NULL || stats == NULL)
+    {
+        printf("Memory allocation failed\n");
 
-    enqueuePacket(&buffer, packet);
+        free(senderWindow);
+        free(buffer);
+        free(stats);
+        return;
+    }
 
-    Packet txPacket = dequeuePacket(&buffer);
+    initWindow(senderWindow, 4);
+    initBuffer(buffer);
+    initStatistics(stats);
+
+    packet = createPacket(0,
+                          "Hello",
+                          HIGH,
+                          CONTROL);
+
+    enqueuePacket(buffer, packet);
+
+    Packet txPacket = dequeuePacket(buffer);
 
     sendPacket(&txPacket);
 
@@ -35,11 +45,15 @@ void testSenderReceiverACK(void)
 
     int ack = generateACK(&txPacket);
 
-    processACK(ack, &senderWindow.base);
+    processACK(ack, &senderWindow->base);
 
     ASSERT_EQUAL(1,
-                 senderWindow.base,
+                 senderWindow->base,
                  "Window slid after ACK");
+
+    free(senderWindow);
+    free(buffer);
+    free(stats);
 }
 
 /*----------------------------------------------------------

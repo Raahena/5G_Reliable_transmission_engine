@@ -19,7 +19,6 @@
 #include "../statistics.h"
 #include "../throughput.h"
 #include "../logging.h"
-#include "../config.h"
 
 /*----------------------------------------------------------
     Global Test Counters
@@ -119,7 +118,9 @@ void runSenderTests(void);
 /*----------------------------------------------------------
     Receiver Tests
 -----------------------------------------------------------*/
+void testReceiverAcceptPacket(void);
 void testValidatePacket(void);
+void testReceiverRejectCorruptPacket(void);
 void testGenerateACK(void);
 void testReceiverNullPacket(void);
 
@@ -203,7 +204,6 @@ void testReinitializeLog(void);
 void runLoggingTests(void);
 
 
-
 /*----------------------------------------------------------
     Integration Tests
 -----------------------------------------------------------*/
@@ -214,11 +214,14 @@ void testAdaptiveWindowControl(void);
 void testStatisticsMetrics(void);
 void testCompleteTransmission(void);
 
-void runAllIntegrationTests(void);
+void runAllIntegrationTests(void);;
 /*----------------------------------------------------------
     Test Runner
 -----------------------------------------------------------*/
 void runAllUnitTests(void);
 
+void printSummary(void);
 
+extern int totalTests;
+extern int passedTests;
 #endif

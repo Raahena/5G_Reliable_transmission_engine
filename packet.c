@@ -42,15 +42,15 @@ Packet createPacket(int seqNo, const char *data, Priority priority, MessageType 
 /*
  * Display Packet
  */
-void displayPacket(Packet p)
+void displayPacket(Packet packet)
 {
     printf("\n========================\n");
-    printf("Sequence Number : %d\n", p.seqNo);
-    printf("Data            : %s\n", p.data);
-    printf("Checksum        : %d\n", p.checksum);
+    printf("Sequence Number : %d\n", packet.seqNo);
+    printf("Data            : %s\n", packet.data);
+    printf("Checksum        : %d\n", packet.checksum);
 
     printf("Priority        : ");
-    switch (p.priority)
+    switch (packet.priority)
     {
         case HIGH:   printf("HIGH\n");   break;
         case MEDIUM: printf("MEDIUM\n"); break;
@@ -59,7 +59,7 @@ void displayPacket(Packet p)
     }
 
     printf("Message Type    : ");
-    switch (p.messageType)
+    switch (packet.messageType)
     {
         case VOICE:        printf("VOICE\n");         break;
         case VIDEO:        printf("VIDEO\n");         break;
@@ -68,6 +68,6 @@ void displayPacket(Packet p)
         case CONTROL:      printf("CONTROL\n");       break;
     }
 
-    printf("ACK Status      : %s\n", p.acked ? "ACKED" : "PENDING");
+    printf("ACK Status      : %s\n", packet.acked ? "ACKED" : "PENDING");
     printf("========================\n");
 }
