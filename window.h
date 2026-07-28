@@ -28,7 +28,7 @@ void slideWindow(Window *window, int ackNo);
 /*
  * Display current window
  */
-void displayWindow(Window *window, int totalPackets);
+void displayWindow(const Window *window, int totalPackets);
 
 /*
  * Check outstanding packets

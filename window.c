@@ -38,7 +38,7 @@ void slideWindow(Window *window, int ackNo)
 /*
  * Display Window
  */
-void displayWindow(Window *window, int totalPackets)
+void displayWindow(const Window *window, int totalPackets)
 {
     int end = window->base + window->windowSize - 1;
 

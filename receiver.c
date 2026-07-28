@@ -80,9 +80,4 @@ int generateACK(Packet *packet)
 /*
  * Show Receiver Status
  */
-void displayReceiverStatus(void)
-{
-    printf("\n===== RECEIVER STATUS =====\n");
-    printf("Expected Packet : %d\n", expectedSeqNo);
-    printf("===========================\n");
-}
+
