@@ -24,6 +24,7 @@ void sendPacket(Packet *packet)
         case LOW:    printf("LOW\n");    break;
         default:     printf("UNKNOWN\n");
     }
+     printf("Fragment %d/%d\n", packet->fragmentNo + 1,packet->totalFragments);
 }
 
 /*

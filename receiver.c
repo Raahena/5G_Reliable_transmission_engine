@@ -1,5 +1,8 @@
+```c
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
+
 #include "receiver.h"
 #include "logging.h"
 
@@ -7,6 +10,15 @@
  * Expected packet number
  * for Go-Back-N receiver
  */
+#define REASSEMBLY_BUFFER_SIZE 4096
+#define MAX_FRAGMENTS          100
+
+static char fragmentStore[MAX_FRAGMENTS][DATA_SIZE];
+static int fragmentReceived[MAX_FRAGMENTS] = {0};
+
+static char reassembledMessage[
+    REASSEMBLY_BUFFER_SIZE] = "";
+
 static int expectedSeqNo = 0;
 
 /*
@@ -15,12 +27,88 @@ static int expectedSeqNo = 0;
 void receivePacket(Packet *packet)
 {
     if (packet == NULL)
+    {
         return;
+    }
 
-    printf("\n[RECEIVER] Packet %d Received\n", packet->seqNo);
-    logPacketEvent("RECEIVED", packet->seqNo);
-    printf("Data : %s\n", packet->data);
-    printf("Checksum : %d\n", packet->checksum);
+    printf("\n[RECEIVER] Packet %d Received\n",
+           packet->seqNo);
+
+    logPacketEvent("RECEIVED",
+                   packet->seqNo);
+
+    printf("Data : %s\n",
+           packet->data);
+
+    printf("Checksum : %d\n",
+           packet->checksum);
+
+    if (fragmentReceived[packet->fragmentNo] == 0)
+    {
+        strcpy(
+            fragmentStore[packet->fragmentNo],
+            packet->data);
+
+        fragmentReceived[packet->fragmentNo] = 1;
+
+        printf(
+            "[RECEIVER] Fragment %d/%d Stored\n",
+            packet->fragmentNo + 1,
+            packet->totalFragments);
+    }
+
+    int allReceived = 1;
+
+    for (int i = 0;
+         i < packet->totalFragments;
+         i++)
+    {
+        if (fragmentReceived[i] == 0)
+        {
+            allReceived = 0;
+            break;
+        }
+    }
+
+    if (allReceived)
+    {
+        reassembledMessage[0] = '\0';
+
+        for (int i = 0;
+             i < packet->totalFragments;
+             i++)
+        {
+            strcat(
+                reassembledMessage,
+                fragmentStore[i]);
+        }
+
+        printf(
+            "\n=================================\n");
+
+        printf(
+            "REASSEMBLED MESSAGE\n");
+
+        printf(
+            "%s\n",
+            reassembledMessage);
+
+        printf(
+            "=================================\n");
+
+        /*
+         * Reset buffers
+         */
+        reassembledMessage[0] = '\0';
+
+        for (int i = 0;
+             i < MAX_FRAGMENTS;
+             i++)
+        {
+            fragmentReceived[i] = 0;
+            fragmentStore[i][0] = '\0';
+        }
+    }
 }
 
 /*
@@ -29,7 +117,9 @@ void receivePacket(Packet *packet)
 int validatePacket(Packet *packet)
 {
     if (packet == NULL)
+    {
         return 0;
+    }
 
     int checksum = calculateChecksum(packet->data);
 
@@ -40,6 +130,7 @@ int validatePacket(Packet *packet)
     }
 
     printf("[RECEIVER] Packet Corrupted\n");
+
     return 0;
 }
 
@@ -61,23 +152,32 @@ int validateSequence(int seqNo)
 int generateACK(Packet *packet)
 {
     if (packet == NULL)
+    {
         return -1;
+    }
 
     if (validateSequence(packet->seqNo))
     {
-        printf("[RECEIVER] Packet %d Accepted\n", packet->seqNo);
+        printf(
+            "[RECEIVER] Packet %d Accepted\n",
+            packet->seqNo);
+
         expectedSeqNo++;
-        printf("[RECEIVER] ACK %d Sent\n", packet->seqNo);
+
+        printf(
+            "[RECEIVER] ACK %d Sent\n",
+            packet->seqNo);
+
         return packet->seqNo;
     }
 
-    printf("[RECEIVER] Out Of Order Packet %d\n", packet->seqNo);
-    printf("[RECEIVER] Duplicate ACK %d Sent\n", expectedSeqNo - 1);
+    printf(
+        "[RECEIVER] Out Of Order Packet %d\n",
+        packet->seqNo);
+
+    printf(
+        "[RECEIVER] Duplicate ACK %d Sent\n",
+        expectedSeqNo - 1);
 
     return expectedSeqNo - 1;
 }
-
-/*
- * Show Receiver Status
- */
-

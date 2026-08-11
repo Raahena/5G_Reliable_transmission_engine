@@ -1,3 +1,4 @@
+```c
 #ifndef PACKET_H
 #define PACKET_H
 
@@ -23,7 +24,9 @@ typedef enum
 
 typedef struct
 {
-    int    seqNo;
+    int         seqNo;
+    int         fragmentNo;
+    int         totalFragments;
     char        data[DATA_SIZE];
     uint16_t    checksum;
     Priority    priority;
@@ -34,7 +37,22 @@ typedef struct
 /*
  * Create Packet
  */
-Packet createPacket(int seqNo, const char *data, Priority priority, MessageType type);
+Packet createPacket(
+    int seqNo,
+    const char *data,
+    Priority priority,
+    MessageType type);
+
+/*
+ * Create Fragment Packet
+ */
+Packet createFragmentPacket(
+    int seqNo,
+    int fragmentNo,
+    int totalFragments,
+    const char *data,
+    Priority priority,
+    MessageType type);
 
 /*
  * Calculate Checksum
@@ -46,4 +64,5 @@ int calculateChecksum(const char *data);
  */
 void displayPacket(Packet packet);
 
-#endif
+#endif /* PACKET_H */
+```
