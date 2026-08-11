@@ -1,4 +1,4 @@
-```c
+
 #ifndef PACKET_H
 #define PACKET_H
 
@@ -65,4 +65,4 @@ int calculateChecksum(const char *data);
 void displayPacket(Packet packet);
 
 #endif /* PACKET_H */
-```
+

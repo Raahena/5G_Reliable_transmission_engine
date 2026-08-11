@@ -88,7 +88,6 @@ static void testPacketSequence(void)
         25);
 }
 
-```c
 static void testFragmentPacketCreation(void)
 {
     Packet p =

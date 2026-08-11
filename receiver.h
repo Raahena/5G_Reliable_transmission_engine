@@ -9,4 +9,6 @@ int validatePacket(Packet *packet);
 
 int generateACK(Packet *packet);
 
+void storeFragment(Packet *packet);
+const char* getReassembledMessage(void);
 #endif

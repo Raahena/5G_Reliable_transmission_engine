@@ -21,7 +21,7 @@
 #include "logging.h"
 #include "throughput.h"
 
-#define FRAGMENT_SIZE 1
+#define FRAGMENT_SIZE 5
 
 int main(void)
 {
@@ -127,7 +127,8 @@ int main(void)
     /*
      * Create packets
      */
-    int messageLength = strlen(fullMessage);
+    int messageLength =
+        strlen(fullMessage);
 
     int totalFragments =
         (messageLength + FRAGMENT_SIZE - 1) /
@@ -226,7 +227,8 @@ int main(void)
             /*
              * LOSS
              */
-            if (simulatePacketLoss(config.lossRate))
+            if (simulatePacketLoss(
+                    config.lossRate))
             {
                 printf(
                     "\n[CHANNEL] Packet %d Lost\n",
@@ -253,7 +255,8 @@ int main(void)
             /*
              * DELAY
              */
-            if (simulatePacketDelay(config.delayRate))
+            if (simulatePacketDelay(
+                    config.delayRate))
             {
                 printf(
                     "[CHANNEL] Packet %d Delayed\n",
@@ -283,14 +286,21 @@ int main(void)
                 tempPacket.checksum += 100;
             }
 
-            receivePacket(&tempPacket);
+            receivePacket(
+                &tempPacket);
 
-            if (validatePacket(&tempPacket))
+            if (validatePacket(
+                    &tempPacket))
             {
-                int ackNo =
-                    generateACK(&tempPacket);
+                storeFragment(
+                    &tempPacket);
 
-                int oldBase = window->base;
+                int ackNo =
+                    generateACK(
+                        &tempPacket);
+
+                int oldBase =
+                    window->base;
 
                 processACK(
                     ackNo,
@@ -308,9 +318,11 @@ int main(void)
 
                         stats->received++;
 
-                        if (!isBufferEmpty(txBuffer))
+                        if (!isBufferEmpty(
+                                txBuffer))
                         {
-                            dequeuePacket(txBuffer);
+                            dequeuePacket(
+                                txBuffer);
                         }
                     }
                 }
@@ -358,6 +370,9 @@ int main(void)
                     if (validatePacket(
                             &packets[i]))
                     {
+                        storeFragment(
+                            &packets[i]);
+
                         int ackNo =
                             generateACK(
                                 &packets[i]);
@@ -414,6 +429,19 @@ int main(void)
         stats->lost,
         stats->retransmitted,
         elapsedTime);
+
+    printf(
+        "\n=================================\n");
+
+    printf(
+        "FINAL REASSEMBLED MESSAGE\n");
+
+    printf(
+        "%s\n",
+        getReassembledMessage());
+
+    printf(
+        "=================================\n");
 
     printf("\nFINAL BUFFER STATUS\n");
 
